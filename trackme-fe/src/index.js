@@ -4,8 +4,8 @@ import { render } from 'react-dom'
 import 'normalize.css'
 import './base.css'
 
-const App = () => (
-  <h1>Hello Karl...</h1>
-)
+import App from './components/App/App'
+
+
 
 render(<App />, document.getElementById('app'))
