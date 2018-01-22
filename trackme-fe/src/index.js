@@ -4,7 +4,7 @@ import { render } from 'react-dom'
 import 'normalize.css'
 import './base.css'
 
-import App from './components/App/App'
+import Routes from './components/Routes/Routes'
 
 
 
