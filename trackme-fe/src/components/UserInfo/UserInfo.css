@@ -1,5 +1,9 @@
-.button {
+#user .button {
   padding: 1em;
   background: #23a;
   color: #fff;
+}
+
+#user-info {
+  display: flex;
 }

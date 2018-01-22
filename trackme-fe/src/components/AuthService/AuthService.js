@@ -5,13 +5,21 @@ import history from '../Routes/history'
 
 export default class AuthService {
   auth0 = new auth0.WebAuth({
-      domain: AUTH0_CONFIG.domain,
-      clientID: AUTH0_CONFIG.clientId,
-      redirectUri: AUTH0_CONFIG.callbackUrl,
-      audience: `https://${AUTH0_CONFIG.domain}/userinfo`,
-      responseType: 'token id_token',
-      scope: 'openid'
-    })
+    domain: AUTH0_CONFIG.domain,
+    clientID: AUTH0_CONFIG.clientId,
+    redirectUri: AUTH0_CONFIG.callbackUrl,
+    audience: `https://${AUTH0_CONFIG.domain}/userinfo`,
+    responseType: 'token id_token',
+    scope: 'openid profile email'
+  })
+
+  constructor() {
+    this.login = this.login.bind(this)
+    this.handleAuthentication = this.handleAuthentication.bind(this)
+    this.isAuthenticated = this.isAuthenticated.bind(this)
+    this.logout = this.logout.bind(this)
+    this.getUserProfile = this.getUserProfile.bind(this)
+  }
 
   login() {
     this.auth0.authorize();
@@ -29,18 +37,25 @@ export default class AuthService {
   }
 
   setSession(authResult) {
+    let { sub, name, nickname, picture, email } = authResult.idTokenPayload
     let expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime())
     localStorage.setItem('access_token', authResult.accessToken)
     localStorage.setItem('id_token', authResult.idToken)
     localStorage.setItem('expires_at', expiresAt)
-    localStorage.setItem('sub', authResult.idTokenPayload.sub)
+    localStorage.setItem('profile', JSON.stringify({
+      sub,
+      name,
+      nickname,
+      picture,
+      email,
+    }))
   }
 
   logout() {
     localStorage.removeItem('access_token')
     localStorage.removeItem('id_token')
     localStorage.removeItem('expires_at')
-    localStorage.removeItem('sub')
+    localStorage.removeItem('profile')
     history.replace('/')
   }
 
@@ -48,4 +63,14 @@ export default class AuthService {
     let expiresAt = JSON.parse(localStorage.getItem('expires_at'))
     return new Date().getTime() < expiresAt
   }
+
+  getUserProfile() {
+    let userProfile = JSON.parse(localStorage.getItem('profile'))
+    if (!userProfile) {
+      console.log('empty user profile')
+      userProfile = {}
+    }
+    return userProfile
+  }
+
 }

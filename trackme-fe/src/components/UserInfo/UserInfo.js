@@ -1,4 +1,6 @@
 import React from 'react'
+import UserProfile from '../UserProfile/UserProfile'
+
 import './UserInfo.css'
 
 class UserInfo extends React.Component {
@@ -13,7 +15,7 @@ class UserInfo extends React.Component {
   render() {
     const { isAuthenticated } = this.props.auth
     return (
-      <div id="login">
+      <div id="user">
         {
           !isAuthenticated() && (
             <button className="button" onClick={this.login.bind(this)}>Log In</button>
@@ -21,7 +23,10 @@ class UserInfo extends React.Component {
         }
         {
           isAuthenticated() && (
-            <button className="button" onClick={this.logout.bind(this)}>Log Out</button>
+            <div id="user-info">
+              <UserProfile {...this.props} />
+              <button className="button" onClick={this.logout.bind(this)}>Log Out</button>
+            </div>
           )
         }
       </div>
