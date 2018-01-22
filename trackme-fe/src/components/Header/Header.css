@@ -6,4 +6,5 @@ header {
 #brand {
   color: #936;
   font-size: 1.2em;
+  cursor: pointer;
 }

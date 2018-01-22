@@ -8,4 +8,4 @@ import Routes from './components/Routes/Routes'
 
 
 
-render(<App />, document.getElementById('app'))
+render(<Routes />, document.getElementById('app'))
